@@ -21,13 +21,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5 # Upgraded from v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5 # Upgraded from v4
         with:
-          node-version: 20
+          node-version: 22 # You can also change this to 22 or 24 to use a modern LTS version
           cache: 'npm'
+
 
       - name: Install dependencies
         run: npm ci
