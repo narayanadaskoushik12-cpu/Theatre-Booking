@@ -1,0 +1,47 @@
+name: Deploy React to GitHub Pages
+
+on:
+  push:
+    branches: ["main"] # Change to "master" if your default branch is master
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        # If using Create React App, leave as 'npm run build'
+        # If using Vite, change 'build' folder to 'dist' in the next step
+        run: npm run build 
+
+      - name: Upload production build
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./build # Change to ./dist if using Vite
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
