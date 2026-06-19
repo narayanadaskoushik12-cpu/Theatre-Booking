@@ -2,7 +2,7 @@ name: Deploy React to GitHub Pages
 
 on:
   push:
-    branches: ["main"] # Change to "master" if your default branch is master
+    branches: ["main"] # Change to "master" if your default branch is named master
 
 permissions:
   contents: read
@@ -21,27 +21,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5 # Upgraded from v4
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v5 # Upgraded from v4
+        uses: actions/setup-node@v4
         with:
-          node-version: 22 # You can also change this to 22 or 24 to use a modern LTS version
+          node-version: 22
           cache: 'npm'
-
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build project
-        # If using Create React App, leave as 'npm run build'
-        # If using Vite, change 'build' folder to 'dist' in the next step
-        run: npm run build 
+        run: npm run build
 
       - name: Upload production build
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./build # Change to ./dist if using Vite
+          path: ./dist # Vite outputs to the 'dist' folder
 
       - name: Deploy to GitHub Pages
         id: deployment
